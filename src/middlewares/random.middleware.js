@@ -1,13 +1,14 @@
+import logger from '../config/logger.js';
 const randomMiddleware = (nro_piso) => {
 
     return (request, response, next) => {
         const numero_random = Math.random()
         if (numero_random > nro_piso) {
-            console.log('tuviste suerte')
+            logger.info('tuviste suerte');
             next()
         }
         else {
-            console.log("Mala suerte")
+            logger.info("Mala suerte");
             response.send({ ok: false, message: 'Has muerto' })
         }
     }

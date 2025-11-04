@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import ENVIRONMENT from './environment.config.js';
+import logger from './logger.js';
 
 // Variable global para mantener la conexión en serverless
 let isConnected = false;
@@ -7,7 +8,7 @@ let isConnected = false;
 async function connectToMongoDB() {
     // Si ya está conectado, no reconectar
     if (isConnected && mongoose.connection.readyState === 1) {
-        console.log('Using existing database connection');
+        logger.info('Using existing database connection');
         return;
     }
 
@@ -19,8 +20,8 @@ async function connectToMongoDB() {
             throw new Error('No se encontró la cadena de conexión a MongoDB');
         }
 
-        console.log(`Conectando a MongoDB...`);
-        console.log(`Entorno: ${process.env.NODE_ENV || 'development'}`);
+        logger.info(`Conectando a MongoDB...`);
+        logger.info(`Entorno: ${process.env.NODE_ENV || 'development'}`);
         
         const connection = await mongoose.connect(connection_string, {
             serverSelectionTimeoutMS: 30000, // Aumentado para serverless
@@ -30,10 +31,10 @@ async function connectToMongoDB() {
         });
         
         isConnected = true;
-        console.log(`✅ Conexión con DB exitosa: ${connection.connection.host}`);
-        console.log(`📊 Base de datos: ${connection.connection.name}`);
+        logger.info(`Conexión con DB exitosa: ${connection.connection.host}`);
+        logger.info(`Base de datos: ${connection.connection.name}`);
     } catch (error) {
-        console.error('❌ [SERVER ERROR]: Fallo en la conexión a MongoDB', error);
+        logger.error('[SERVER ERROR]: Fallo en la conexión a MongoDB', error);
         isConnected = false;
         throw error; // Lanzar el error para que sea manejado por el llamador
     }

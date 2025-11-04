@@ -12,6 +12,7 @@ import multer from 'multer';
 import path from 'path';
 import authMiddleware from "./middlewares/authMiddleware.js";
 import MessageService from "./services/message.service.js";
+import logger from './config/logger.js';
 
 const app = express();
 
@@ -170,7 +171,7 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     });
 
     io.on('connection', (socket) => {
-        console.log(`✅ Usuario conectado: ${socket.user.name} (${socket.user.id})`);
+        logger.info(`✅ Usuario conectado: ${socket.user.name} (${socket.user.id})`);
         
         // Unir al usuario a su sala personal
         socket.join(`user_${socket.user.id}`);
@@ -178,7 +179,7 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
         // Unirse a salas de chats
         socket.on('joinChat', (chat_id) => {
             socket.join(`chat_${chat_id}`);
-            console.log(`Usuario ${socket.user.name} se unió al chat ${chat_id}`);
+            logger.info(`Usuario ${socket.user.name} se unió al chat ${chat_id}`);
         });
         
         // Enviar mensaje
@@ -198,7 +199,7 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
                 // Emitir a todos los participantes del chat
                 io.to(`chat_${chat_id}`).emit('receiveMessage', message);
                 
-                console.log(`Mensaje enviado en chat ${chat_id} por ${socket.user.name}`);
+                logger.info(`Mensaje enviado en chat ${chat_id} por ${socket.user.name}`);
             } catch (error) {
                 console.error('ERROR AL ENVIAR MENSAJE:', error);
                 socket.emit('error', { message: 'Error al enviar mensaje' });
@@ -226,7 +227,7 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
         
         // Desconexión
         socket.on('disconnect', () => {
-            console.log(`❌ Usuario desconectado: ${socket.user.name}`);
+            logger.info(`❌ Usuario desconectado: ${socket.user.name}`);
         });
     });
 }
@@ -244,9 +245,9 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     const server = httpServer || createServer(app);
     server.listen(ENVIRONMENT.PORT || 3000, () => {
-        console.log(`🚀 Servidor corriendo en puerto ${ENVIRONMENT.PORT || 3000}`);
+        logger.info(`Servidor corriendo en puerto ${ENVIRONMENT.PORT || 3000}`);
         if (io) {
-            console.log(`📡 Socket.io configurado correctamente`);
+            logger.info(`Socket.io configurado correctamente`);
         }
     });
 }
