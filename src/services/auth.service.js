@@ -26,13 +26,17 @@ class AuthService {
             ENVIRONMENT.JWT_SECRET
         )
 
+        const backendUrl = process.env.NODE_ENV === 'development' 
+            ? 'http://localhost:3000' 
+            : ENVIRONMENT.URL_BACKEND;
+
         await mailTransporter.sendMail({
             from: ENVIRONMENT.GMAIL_USER,
             to: email,
             subject: 'Verifica tu cuenta de mail',
             html: `
                 <h1>Verifica tu cuenta de mail</h1>
-                <a href="${ENVIRONMENT.URL_BACKEND}/api/auth/verify-email/${verification_token}">Verificar</a>
+                <a href="${backendUrl}/api/auth/verify-email/${verification_token}">Verificar</a>
             `
         })
 
