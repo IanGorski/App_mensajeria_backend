@@ -13,10 +13,24 @@ import path from 'path';
 import authMiddleware from "./middlewares/authMiddleware.js";
 import MessageService from "./services/message.service.js";
 
-// Conectar a MongoDB
-connectToMongoDB();
-
 const app = express();
+
+// Middleware para conectar a MongoDB antes de cada solicitud en serverless
+app.use(async (req, res, next) => {
+    try {
+        await connectToMongoDB();
+        next();
+    } catch (error) {
+        console.error('Error al conectar con MongoDB:', error);
+        res.status(500).json({
+            ok: false,
+            message: 'Error de conexión con la base de datos',
+            status: 500
+        });
+    }
+});
+
+const httpServer = createServer(app);
 const httpServer = createServer(app);
 
 // Configurar Socket.io
