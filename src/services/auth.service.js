@@ -8,8 +8,6 @@ import jwt from 'jsonwebtoken'
 
 class AuthService {
     static async register(email, password, name){
-
-        console.log(email, name, password)
         const user = await UserRepository.getByEmail(email)
         
         if(user){
@@ -76,37 +74,43 @@ class AuthService {
     }
 
     static async login (email, password){
-        /*Búsqueda de usuario por mail, validación de existencia y verificación de mail, comparar password recibida con la del usuario y generación de token con datos de sesion*/
-        const user_found = await UserRepository.getByEmail(email)
-        
-        if(!user_found) {
-            throw new ServerError(404, 'Usuario con este mail no encontrado')
-        }
-        
-        if(!user_found.verified_email){
-            throw new ServerError(401, 'Usuario con mail no verificado')
-        }
-
-        const is_same_passoword = await bcrypt.compare( password, user_found.password )
-        if(!is_same_passoword){
-            throw new ServerError(401, 'Contraseña invalida')
-        }
-
-        //Creacion del token JWT de autenticacion NO sensible
-        const auth_token = jwt.sign(
-            {
-                name: user_found.name,
-                email: user_found.email,
-                id: user_found._id,
-            },
-            ENVIRONMENT.JWT_SECRET,
-            {
-                expiresIn: '24h'
+        try {
+            /*Búsqueda de usuario por mail, validación de existencia y verificación de mail, comparar password recibida con la del usuario y generación de token con datos de sesion*/
+            const user_found = await UserRepository.getByEmail(email)
+            
+            if(!user_found) {
+                throw new ServerError(404, 'Usuario con este mail no encontrado')
             }
-        )
+            
+            if(!user_found.verified_email){
+                throw new ServerError(401, 'Usuario con mail no verificado')
+            }
 
-        return {
-            auth_token: auth_token
+            const is_same_passoword = await bcrypt.compare( password, user_found.password )
+            
+            if(!is_same_passoword){
+                throw new ServerError(401, 'Contraseña invalida')
+            }
+
+            //Creacion del token JWT de autenticacion NO sensible
+            const auth_token = jwt.sign(
+                {
+                    name: user_found.name,
+                    email: user_found.email,
+                    id: user_found._id,
+                },
+                ENVIRONMENT.JWT_SECRET,
+                {
+                    expiresIn: '24h'
+                }
+            )
+
+            return {
+                auth_token: auth_token
+            }
+        } catch (error) {
+            console.error('Error en AuthService.login:', error)
+            throw error
         }
     }
 }

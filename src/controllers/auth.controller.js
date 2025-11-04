@@ -5,7 +5,6 @@ import AuthService from "../services/auth.service.js";
 class AuthController {
     static async register (request, response){
         try{
-            console.log('Registro recibido:', request.body)
             const { email, password, name } = request.body
             
             await AuthService.register(email, password, name)
@@ -71,6 +70,15 @@ class AuthController {
         try{
             const {email, password} = request.body
 
+            // Validar que se proporcionen email y password
+            if (!email || !password) {
+                return response.status(400).json({
+                    ok: false,
+                    message: 'Email y contraseña son requeridos',
+                    status: 400
+                })
+            }
+
             const { auth_token } = await AuthService.login(email, password)
 
             response.status(200).json(
@@ -86,6 +94,7 @@ class AuthController {
             return 
         }
         catch(error){
+            console.error('ERROR AL HACER LOGIN', error)
             if(error.status){
                 return response.status(error.status).json({
                     ok:false,
@@ -95,12 +104,13 @@ class AuthController {
             }
             else{
                 console.error(
-                    'ERROR AL REGISTRAR', error
+                    'ERROR AL HACER LOGIN (INTERNAL)', error
                 )
                 return response.status(500).json({
                     ok: false,
                     message: 'Error interno del servidor',
-                    status: 500
+                    status: 500,
+                    error: process.env.NODE_ENV === 'development' ? error.message : undefined
                 })
             }
         }

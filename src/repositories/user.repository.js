@@ -43,11 +43,16 @@ class UserRepository {
     }
 
     static async getByEmail (email){
-        const user_found = await User.findOne({
-            email: email, 
-            active: true
-        })
-        return user_found
+        try {
+            const user_found = await User.findOne({
+                email: email, 
+                active: true
+            })
+            return user_found
+        } catch (error) {
+            console.error('[SERVER ERROR]: no se pudo obtener el usuario con email ' + email, error)
+            throw error
+        }
     }
 
     static async deleteById (user_id){
@@ -56,7 +61,6 @@ class UserRepository {
     }
 
     static async updateById (user_id, update_user){
-        console.log(user_id, update_user)
         await User.findByIdAndUpdate(
             user_id,
             update_user

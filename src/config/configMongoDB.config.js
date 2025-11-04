@@ -12,18 +12,21 @@ async function connectToMongoDB() {
     }
 
     try {
-        // Usa MONGO_DB_CONNECTION_STRING para Atlas o MONGO_URI para local
-        const connection_string = process.env.NODE_ENV === 'production' 
-            ? ENVIRONMENT.MONGO_DB_CONNECTION_STRING 
-            : (ENVIRONMENT.MONGO_URI || ENVIRONMENT.MONGO_DB_CONNECTION_STRING);
+        // Usa MONGO_DB_CONNECTION_STRING (prioridad) o MONGO_URI
+        const connection_string = ENVIRONMENT.MONGO_DB_CONNECTION_STRING || ENVIRONMENT.MONGO_URI;
         
         if (!connection_string) {
             throw new Error('No se encontró la cadena de conexión a MongoDB');
         }
 
+        console.log(`Conectando a MongoDB...`);
+        console.log(`Entorno: ${process.env.NODE_ENV || 'development'}`);
+        
         const connection = await mongoose.connect(connection_string, {
-            serverSelectionTimeoutMS: 10000,
+            serverSelectionTimeoutMS: 30000, // Aumentado para serverless
             socketTimeoutMS: 45000,
+            maxPoolSize: 1, // Importante para serverless
+            minPoolSize: 0
         });
         
         isConnected = true;
