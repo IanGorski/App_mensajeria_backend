@@ -1,6 +1,7 @@
 import ENVIRONMENT from "../config/environment.config.js";
 import { ServerError } from "../error.js";
 import AuthService from "../services/auth.service.js";
+import winston from "winston";
 
 class AuthController {
     static async register (request, response){
@@ -23,7 +24,7 @@ class AuthController {
                 })
             }
             else{
-                console.error(
+                winston.error(
                     'ERROR AL REGISTRAR', error
                 )
                 response.status(500).json({
@@ -40,26 +41,21 @@ class AuthController {
             const {verification_token} = request.params
 
             await AuthService.verifyEmail(verification_token)
-            const frontendUrl = ENVIRONMENT.URL_FRONTEND;
 
+            if (!process.env.URL_FRONTEND) {
+                throw new Error("La variable de entorno URL_FRONTEND no está definida.");
+            }
+
+            const frontendUrl = process.env.URL_FRONTEND;
             response.redirect(`${frontendUrl}/login?from=verified_email`)
         }
         catch(error){
 
-            //TODO: Si hay algun fallo reenviar el mail de validacion
-            if(error.status){
-                response.send(
-                    `<h1>${error.message}</h1>`
-                )
-            }
-            else{
-                console.error(
-                    'ERROR AL REGISTRAR', error
-                )
-
-                response.send(
-                    `<h1>Error en el servidor, intentelo mas tarde</h1>`
-                )
+            if (error.status) {
+                response.send(`<h1>${error.message}</h1>`)
+            } else {
+                winston.error("ERROR AL REGISTRAR", error);
+                response.send(`<h1>Error en el servidor, intentelo más tarde</h1>`)
             }
         }
     }
