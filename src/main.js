@@ -201,10 +201,14 @@ io.on('connection', (socket) => {
     });
 });
 
-// Iniciar servidor
-httpServer.listen(ENVIRONMENT.PORT || 3000, () => {
-    console.log(`🚀 Servidor corriendo en puerto ${ENVIRONMENT.PORT || 3000}`);
-    console.log(`📡 Socket.io configurado correctamente`);
-});
+// Iniciar servidor solo si no está en Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    httpServer.listen(ENVIRONMENT.PORT || 3000, () => {
+        console.log(`🚀 Servidor corriendo en puerto ${ENVIRONMENT.PORT || 3000}`);
+        console.log(`📡 Socket.io configurado correctamente`);
+    });
+}
 
+// Exportar la app para Vercel
+export default app;
 export { io };
