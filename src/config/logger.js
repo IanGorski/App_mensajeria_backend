@@ -3,7 +3,12 @@ import winston from 'winston';
 // Configurar transports según el entorno
 const transports = [
     new winston.transports.Console({
-        format: winston.format.simple()
+        format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.printf(({ level, message, timestamp }) => {
+                return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+            })
+        )
     })
 ];
 

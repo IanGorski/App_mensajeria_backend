@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env' });
 import ENVIRONMENT from "./config/environment.config.js";
 import connectToMongoDB from "./config/configMongoDB.config.js";
 import express from 'express';
@@ -16,6 +18,8 @@ import MessageService from "./services/message.service.js";
 import UserRepository from "./repositories/user.repository.js";
 import ChatRepository from "./repositories/chat.repository.js";
 import logger from './config/logger.js';
+
+
 
 const app = express();
 
