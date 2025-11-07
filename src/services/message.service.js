@@ -71,6 +71,18 @@ class MessageService {
         }
     }
 
+    static async markChatAsRead(chat_id, user_id) {
+        try {
+            // Verificar que el usuario sea participante del chat
+            await ChatService.getById(chat_id, user_id);
+            
+            // Marcar todos los mensajes del chat como leídos
+            await MessageRepository.markChatMessagesAsRead(chat_id, user_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async deleteMessage(message_id, user_id) {
         try {
             const message = await MessageRepository.getById(message_id);

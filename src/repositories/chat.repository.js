@@ -22,7 +22,7 @@ class ChatRepository {
                 archived: false,
                 active: true
             })
-            .populate('participants', 'name email')
+            .populate('participants', 'name email online last_connection')
             .populate({
                 path: 'lastMessage',
                 populate: {

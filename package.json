@@ -4,7 +4,9 @@
   "main": "./src/main.js",
   "scripts": {
     "start": "node ./src/main.js",
+    "start:socket": "node ./src/socket.js",
     "dev": "node --watch ./src/main.js",
+    "dev:socket": "node --watch ./src/socket.js",
     "nodemon-dev": "nodemon ./src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

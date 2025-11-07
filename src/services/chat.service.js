@@ -17,21 +17,26 @@ class ChatService {
                         lastMessage: chat.lastMessage?.content || '',
                         time: chat.lastMessage?.created_at || chat.created_at,
                         unread: 0, // Se calculará en otro endpoint
-                        isGroup: true
+                        isGroup: true,
+                        participants: chat.participants
                     };
                 } else {
-                    // Chat privado - obtener info del otros usuarios
+                    // Chat privado - obtener info de otros usuarios
                     const otherUser = chat.participants.find(
                         p => p._id.toString() !== user_id.toString()
                     );
                     return {
                         id: chat._id,
                         name: otherUser?.name || 'Usuario desconocido',
+                        email: otherUser?.email || '',
                         avatar: otherUser?.avatar || null,
+                        online: otherUser?.online || false,
+                        last_connection: otherUser?.last_connection || null,
                         lastMessage: chat.lastMessage?.content || '',
                         time: chat.lastMessage?.created_at || chat.created_at,
                         unread: 0, // se calcula en otro ENDPOINT
-                        isGroup: false
+                        isGroup: false,
+                        otherUserId: otherUser?._id
                     };
                 }
             });

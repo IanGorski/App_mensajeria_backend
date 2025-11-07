@@ -33,6 +33,18 @@ const userSchema = new mongoose.Schema(
         verified_email: {
             type: Boolean,
             default: false
+        },
+        online: {
+            type: Boolean,
+            default: false
+        },
+        last_connection: {
+            type: Date,
+            default: null
+        },
+        socket_id: {
+            type: String,
+            default: null
         }
     }
 )

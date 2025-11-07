@@ -6,12 +6,15 @@ import { Server } from 'socket.io';
 import authRouter from "./routes/auth.router.js";
 import chatRouter from "./routes/chat.router.js";
 import messageRouter from "./routes/message.router.js";
+import userRouter from "./routes/user.router.js";
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 import authMiddleware from "./middlewares/authMiddleware.js";
 import MessageService from "./services/message.service.js";
+import UserRepository from "./repositories/user.repository.js";
+import ChatRepository from "./repositories/chat.repository.js";
 import logger from './config/logger.js';
 
 const app = express();
@@ -37,6 +40,7 @@ const corsOptions = {
     origin: function (origin, callback) {
         const allowedOrigins = [
             'http://localhost:5173',
+            'http://localhost:5174',
             'http://localhost:3000',
             'https://app-mensajeria-frontend.vercel.app'
         ];
@@ -108,6 +112,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/chats', chatRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/users', userRouter);
 
 // Ruta para subir archivos
 app.post('/api/upload', authMiddleware, upload.single('file'), (req, res) => {
@@ -146,9 +151,17 @@ let httpServer;
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     httpServer = createServer(app);
     
+    // Permitir orígenes locales y el configurado por entorno
+    const allowedSocketOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:3000',
+        ENVIRONMENT.URL_FRONTEND
+    ].filter(Boolean);
+
     io = new Server(httpServer, {
         cors: {
-            origin: ENVIRONMENT.URL_FRONTEND || '*',
+            origin: allowedSocketOrigins,
             methods: ["GET", "POST"],
             credentials: true
         }
@@ -170,22 +183,70 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
         }
     });
 
-    io.on('connection', (socket) => {
-        logger.info(`✅ Usuario conectado: ${socket.user.name} (${socket.user.id})`);
+    io.on('connection', async (socket) => {
+        logger.info(`Usuario conectado: ${socket.user.name} (${socket.user.id})`);
+        
+        // Actualizar estado de conexión del usuario
+        await UserRepository.updateConnectionStatus(socket.user.id, true, socket.id);
         
         // Unir al usuario a su sala personal
         socket.join(`user_${socket.user.id}`);
         
-        // Unirse a salas de chats
+        // Obtener los chats del usuario y unirse a sus salas
+        try {
+            const userChats = await ChatRepository.getByUserId(socket.user.id);
+            userChats.forEach(chat => {
+                socket.join(`chat_${chat._id}`);
+                logger.info(`Usuario ${socket.user.name} se unió al chat ${chat._id}`);
+            });
+        } catch (error) {
+            logger.error('Error al unir usuario a sus chats:', error);
+        }
+        
+        // Notificar a todos los contactos que el usuario está online
+        try {
+            const userChats = await ChatRepository.getByUserId(socket.user.id);
+            userChats.forEach(chat => {
+                socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
+                    user_id: socket.user.id,
+                    online: true
+                });
+            });
+        } catch (error) {
+            logger.error('Error al notificar estado online:', error);
+        }
+
+        // Sync inicial de estados para el cliente conectado
+        try {
+            const userChats = await ChatRepository.getByUserId(socket.user.id);
+            const statusMap = {};
+            userChats.forEach(chat => {
+                chat.participants.forEach(p => {
+                    if (p._id.toString() !== socket.user.id.toString()) {
+                        statusMap[p._id] = {
+                            online: !!p.online,
+                            last_connection: p.last_connection || null
+                        };
+                    }
+                });
+            });
+            socket.emit('statusSync', statusMap);
+        } catch (error) {
+            logger.error('Error preparando statusSync inicial:', error);
+        }
+        
+        // Unirse a salas de chats (para nuevos chats creados después de conectarse)
         socket.on('joinChat', (chat_id) => {
             socket.join(`chat_${chat_id}`);
             logger.info(`Usuario ${socket.user.name} se unió al chat ${chat_id}`);
         });
         
         // Enviar mensaje
-        socket.on('sendMessage', async (data) => {
+    socket.on('sendMessage', async (data) => {
             try {
-                const { chat_id, content, type, fileUrl } = data;
+        const { chat_id, content, type, fileUrl, client_id } = data;
+                
+                logger.info(`Enviando mensaje en chat ${chat_id} desde usuario ${socket.user.name}`);
                 
                 // Guardar mensaje en BD
                 const message = await MessageService.sendMessage(
@@ -196,13 +257,53 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
                     fileUrl
                 );
                 
-                // Emitir a todos los participantes del chat
-                io.to(`chat_${chat_id}`).emit('receiveMessage', message);
+                // Actualizar el lastMessage del chat
+                await ChatRepository.updateLastMessage(chat_id, message._id);
                 
-                logger.info(`Mensaje enviado en chat ${chat_id} por ${socket.user.name}`);
+                // Preparar objeto de mensaje para emitir
+                const messageToEmit = {
+                    ...message.toObject(),
+                    sender: {
+                        id: socket.user.id,
+                        _id: socket.user.id,
+                        name: socket.user.name
+                    },
+                    sender_id: {
+                        _id: socket.user.id,
+                        name: socket.user.name
+                    },
+                    // Devolver el client_id para poder conciliar el mensaje optimista en el cliente
+                    client_id: client_id || null
+                };
+                
+                // Emitir a todos los participantes del chat (incluyendo el remitente)
+                io.to(`chat_${chat_id}`).emit('receiveMessage', messageToEmit);
+                
+                logger.info(`Mensaje enviado exitosamente en chat ${chat_id}`);
             } catch (error) {
-                console.error('ERROR AL ENVIAR MENSAJE:', error);
-                socket.emit('error', { message: 'Error al enviar mensaje' });
+                logger.error('ERROR AL ENVIAR MENSAJE:', error);
+                socket.emit('error', { message: 'Error al enviar mensaje', details: error.message });
+            }
+        });
+
+        // Petición explícita de sync de estados desde el cliente
+        socket.on('requestStatusSync', async () => {
+            try {
+                const userChats = await ChatRepository.getByUserId(socket.user.id);
+                const statusMap = {};
+                userChats.forEach(chat => {
+                    chat.participants.forEach(p => {
+                        if (p._id.toString() !== socket.user.id.toString()) {
+                            statusMap[p._id] = {
+                                online: !!p.online,
+                                last_connection: p.last_connection || null
+                            };
+                        }
+                    });
+                });
+                socket.emit('statusSync', statusMap);
+            } catch (error) {
+                logger.error('Error al procesar requestStatusSync:', error);
             }
         });
         
@@ -225,9 +326,42 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
             });
         });
         
+        // Marcar mensajes como leídos
+        socket.on('markAsRead', async (data) => {
+            try {
+                const { chat_id } = data;
+                await MessageService.markChatAsRead(chat_id, socket.user.id);
+                
+                // Notificar a otros usuarios del chat
+                socket.to(`chat_${chat_id}`).emit('messagesRead', {
+                    user_id: socket.user.id,
+                    chat_id
+                });
+            } catch (error) {
+                logger.error('ERROR AL MARCAR COMO LEÍDO:', error);
+            }
+        });
+        
         // Desconexión
-        socket.on('disconnect', () => {
-            logger.info(`❌ Usuario desconectado: ${socket.user.name}`);
+        socket.on('disconnect', async () => {
+            logger.info(`Usuario desconectado: ${socket.user.name}`);
+            
+            // Actualizar estado de conexión del usuario
+            await UserRepository.updateConnectionStatus(socket.user.id, false, null);
+            
+            // Notificar a todos los contactos que el usuario está offline
+            try {
+                const userChats = await ChatRepository.getByUserId(socket.user.id);
+                userChats.forEach(chat => {
+                    socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
+                        user_id: socket.user.id,
+                        online: false,
+                        last_connection: new Date()
+                    });
+                });
+            } catch (error) {
+                logger.error('Error al notificar estado offline:', error);
+            }
         });
     });
 }
