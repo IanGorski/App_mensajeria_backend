@@ -239,10 +239,12 @@ io.on('connection', async (socket) => {
 });
 
 // Iniciar servidor
-const PORT = process.env.SOCKET_PORT || 3001;
+// Render usa la variable PORT, no SOCKET_PORT
+const PORT = process.env.PORT || process.env.SOCKET_PORT || 3001;
 httpServer.listen(PORT, () => {
     logger.info(`Servidor WebSocket corriendo en puerto ${PORT}`);
     logger.info(`Socket.io configurado correctamente`);
+    logger.info(`Orígenes permitidos: ${allowedSocketOrigins.join(', ')}`);
 });
 
 export { io, httpServer };
