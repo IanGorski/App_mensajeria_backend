@@ -1,4 +1,5 @@
 import Chat from "../models/Chat.model.js";
+import logger from "../config/logger.js";
 
 class ChatRepository {
     static async create(participants, isGroup = false, groupData = {}) {
@@ -10,7 +11,7 @@ class ChatRepository {
             });
             return chat;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo crear el chat', error);
+            logger.error('[SERVER ERROR]: no se pudo crear el chat', error);
             throw error;
         }
     }
@@ -30,10 +31,10 @@ class ChatRepository {
                     select: 'name'
                 }
             })
-            .sort({ 'created_at': -1 });
+            .sort({ 'lastMessage.created_at': -1, 'created_at': -1 });
             return chats;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudieron obtener los chats', error);
+            logger.error('[SERVER ERROR]: no se pudieron obtener los chats', error);
             throw error;
         }
     }
@@ -44,7 +45,7 @@ class ChatRepository {
                 .populate('participants', 'name email');
             return chat;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo obtener el chat', error);
+            logger.error('[SERVER ERROR]: no se pudo obtener el chat', error);
             throw error;
         }
     }
@@ -57,7 +58,7 @@ class ChatRepository {
             });
             return chat;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo encontrar el chat privado', error);
+            logger.error('[SERVER ERROR]: no se pudo encontrar el chat privado', error);
             throw error;
         }
     }
@@ -68,7 +69,7 @@ class ChatRepository {
                 lastMessage: message_id 
             });
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo actualizar el último mensaje', error);
+            logger.error('[SERVER ERROR]: no se pudo actualizar el último mensaje', error);
             throw error;
         }
     }
@@ -77,7 +78,7 @@ class ChatRepository {
         try {
             await Chat.findByIdAndUpdate(chat_id, { archived: true });
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo archivar el chat', error);
+            logger.error('[SERVER ERROR]: no se pudo archivar el chat', error);
             throw error;
         }
     }
@@ -86,7 +87,7 @@ class ChatRepository {
         try {
             await Chat.findByIdAndUpdate(chat_id, { active: false });
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo eliminar el chat', error);
+            logger.error('[SERVER ERROR]: no se pudo eliminar el chat', error);
             throw error;
         }
     }
@@ -95,7 +96,7 @@ class ChatRepository {
         try {
             await Chat.findByIdAndUpdate(chat_id, updates);
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo actualizar la información del grupo', error);
+            logger.error('[SERVER ERROR]: no se pudo actualizar la información del grupo', error);
             throw error;
         }
     }

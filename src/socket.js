@@ -159,6 +159,17 @@ io.on('connection', async (socket) => {
         }
     });
 
+    // Reenviar mensajes recientes al cliente que se conecta tarde
+    socket.on('requestRecentMessages', async (chat_id) => {
+        try {
+            const recentMessages = await MessageService.getMessages(chat_id, socket.user.id, 50, 0); // Últimos 50 mensajes
+            socket.emit('recentMessages', { chat_id, messages: recentMessages });
+        } catch (error) {
+            logger.error('ERROR AL OBTENER MENSAJES RECIENTES:', error);
+            socket.emit('error', { message: 'Error al obtener mensajes recientes', details: error.message });
+        }
+    });
+
     // Petición de sync de estados
     socket.on('requestStatusSync', async () => {
         try {

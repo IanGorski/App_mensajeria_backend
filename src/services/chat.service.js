@@ -1,6 +1,7 @@
 import ChatRepository from "../repositories/chat.repository.js";
 import UserRepository from "../repositories/user.repository.js";
 import { ServerError } from "../error.js";
+import logger from "../config/logger.js";
 
 class ChatService {
     static async getAll(user_id) {
@@ -43,7 +44,7 @@ class ChatService {
             
             return formattedChats;
         } catch (error) {
-            console.error('[SERVICE ERROR]: Error al obtener chats', error);
+            logger.error('[SERVICE ERROR]: Error al obtener chats', error);
             throw error;
         }
     }

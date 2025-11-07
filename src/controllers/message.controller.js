@@ -5,7 +5,7 @@ class MessageController {
         try {
             const { user } = request;
             const { chat_id } = request.params;
-            const { limit = 50, skip = 0 } = request.query;
+            const { limit = 300, skip = 0 } = request.query;
             
             const messages = await MessageService.getMessages(
                 chat_id, 

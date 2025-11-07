@@ -1,4 +1,5 @@
 import Message from "../models/Message.model.js";
+import logger from "../config/logger.js";
 
 class MessageRepository {
     static async create(chat_id, sender_id, content, type = 'text', fileUrl = null) {
@@ -15,12 +16,12 @@ class MessageRepository {
             await message.populate('sender_id', 'name email');
             return message;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo crear el mensaje', error);
+            logger.error('[SERVER ERROR]: no se pudo crear el mensaje', error);
             throw error;
         }
     }
 
-    static async getByChatId(chat_id, limit = 50, skip = 0) {
+    static async getByChatId(chat_id, limit = 300, skip = 0) {
         try {
             const messages = await Message.find({ 
                 chat_id, 
@@ -32,7 +33,7 @@ class MessageRepository {
             .skip(skip);
             return messages;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudieron obtener los mensajes', error);
+            logger.error('[SERVER ERROR]: no se pudieron obtener los mensajes', error);
             throw error;
         }
     }
@@ -43,7 +44,7 @@ class MessageRepository {
                 .populate('sender_id', 'name email');
             return message;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo obtener el mensaje', error);
+            logger.error('[SERVER ERROR]: no se pudo obtener el mensaje', error);
             throw error;
         }
     }
@@ -68,7 +69,7 @@ class MessageRepository {
                 });
             }
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo marcar como leído', error);
+            logger.error('[SERVER ERROR]: no se pudo marcar como leído', error);
             throw error;
         }
     }
@@ -91,7 +92,7 @@ class MessageRepository {
                 }
             );
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudieron marcar mensajes como leídos', error);
+            logger.error('[SERVER ERROR]: no se pudieron marcar mensajes como leídos', error);
             throw error;
         }
     }
@@ -100,7 +101,7 @@ class MessageRepository {
         try {
             await Message.findByIdAndUpdate(message_id, { deleted: true });
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo eliminar el mensaje', error);
+            logger.error('[SERVER ERROR]: no se pudo eliminar el mensaje', error);
             throw error;
         }
     }
@@ -115,7 +116,7 @@ class MessageRepository {
             });
             return count;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo obtener el conteo de mensajes no leídos', error);
+            logger.error('[SERVER ERROR]: no se pudo obtener el conteo de mensajes no leídos', error);
             throw error;
         }
     }

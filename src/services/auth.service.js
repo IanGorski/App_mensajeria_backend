@@ -4,7 +4,7 @@ import { ServerError } from "../error.js";
 import UserRepository from "../repositories/user.repository.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-
+import logger from "../config/logger.js"
 
 class AuthService {
     static async register(email, password, name){
@@ -79,7 +79,7 @@ class AuthService {
 
     static async login (email, password){
         try {
-            /*Búsqueda de usuario por mail, validación de existencia y verificación de mail, comparar password recibida con la del usuario y generación de token con datos de sesion*/
+            //Búsqueda de usuario por mail, validación de existencia y verificación de mail, comparar password recibida con la del usuario y generación de token con datos de sesion
             const user_found = await UserRepository.getByEmail(email)
             
             if(!user_found) {
@@ -113,7 +113,7 @@ class AuthService {
                 auth_token: auth_token
             }
         } catch (error) {
-            console.error('Error en AuthService.login:', error)
+            logger.error('Error en AuthService.login:', error);
             throw error
         }
     }

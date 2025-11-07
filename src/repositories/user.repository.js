@@ -1,4 +1,5 @@
 import User from "../models/User.model.js"
+import logger from "../config/logger.js"
 
 class UserRepository {
 
@@ -11,7 +12,7 @@ class UserRepository {
             })
         }
         catch (error) {
-            console.error('[SERVER ERROR]: no se pudo crear el usuario', error)
+            logger.error('[SERVER ERROR]: no se pudo crear el usuario', error)
             throw error
         }
     }
@@ -26,7 +27,7 @@ class UserRepository {
             return users
         }
         catch(error){
-            console.error('[SERVER ERROR]: no se pudo obtener la lista de usuarios', error)
+            logger.error('[SERVER ERROR]: no se pudo obtener la lista de usuarios', error)
             throw error
         }
     }
@@ -37,7 +38,7 @@ class UserRepository {
             return user_found
         }
         catch(error){
-            console.error('[SERVER ERROR]: no se pudo obtener el usuario con id ' + user_id, error)
+            logger.error('[SERVER ERROR]: no se pudo obtener el usuario con id ' + user_id, error)
             throw error
         }
     }
@@ -50,7 +51,7 @@ class UserRepository {
             })
             return user_found
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo obtener el usuario con email ' + email, error)
+            logger.error('[SERVER ERROR]: no se pudo obtener el usuario con email ' + email, error)
             throw error
         }
     }
@@ -76,7 +77,7 @@ class UserRepository {
             }).select('name email online last_connection');
             return users;
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo buscar usuarios por email', error);
+            logger.error('[SERVER ERROR]: no se pudo buscar usuarios por email', error);
             throw error;
         }
     }
@@ -93,7 +94,7 @@ class UserRepository {
             }
             await User.findByIdAndUpdate(user_id, update);
         } catch (error) {
-            console.error('[SERVER ERROR]: no se pudo actualizar estado de conexión', error);
+            logger.error('[SERVER ERROR]: no se pudo actualizar estado de conexión', error);
             throw error;
         }
     }

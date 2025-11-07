@@ -27,7 +27,7 @@ class MessageService {
         }
     }
 
-    static async getMessages(chat_id, user_id, limit = 50, skip = 0) {
+    static async getMessages(chat_id, user_id, limit = 300, skip = 0) {
         try {
             // Verificar que el usuario sea participante del chat
             await ChatService.getById(chat_id, user_id);
