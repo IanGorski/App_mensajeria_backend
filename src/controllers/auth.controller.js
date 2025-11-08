@@ -85,7 +85,7 @@ class AuthController {
             return 
         }
         catch(error){
-            console.error('ERROR AL HACER LOGIN', error)
+            logger.error('ERROR AL HACER LOGIN', error);
             if(error.status){
                 return response.status(error.status).json({
                     ok:false,
@@ -94,9 +94,7 @@ class AuthController {
                 })
             }
             else{
-                console.error(
-                    'ERROR AL HACER LOGIN (INTERNAL)', error
-                )
+                logger.error('ERROR AL HACER LOGIN (INTERNAL)', error);
                 return response.status(500).json({
                     ok: false,
                     message: 'Error interno del servidor',
@@ -127,7 +125,7 @@ class AuthController {
             })
         }
         catch(error){
-            console.error('ERROR AL VERIFICAR TOKEN', error)
+            logger.error('ERROR AL VERIFICAR TOKEN', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',

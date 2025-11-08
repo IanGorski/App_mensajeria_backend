@@ -1,4 +1,5 @@
 import UserService from "../services/user.service.js";
+import logger from '../config/logger.js';
 
 class UserController {
     static async searchUsers(request, response) {
@@ -30,7 +31,7 @@ class UserController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL BUSCAR USUARIOS', error);
+            logger.error('ERROR AL BUSCAR USUARIOS', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -58,7 +59,7 @@ class UserController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL OBTENER USUARIO', error);
+            logger.error('ERROR AL OBTENER USUARIO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',

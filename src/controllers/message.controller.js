@@ -1,4 +1,5 @@
 import MessageService from "../services/message.service.js";
+import logger from '../config/logger.js';
 
 class MessageController {
     static async getMessages(request, response) {
@@ -27,7 +28,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL OBTENER MENSAJES', error);
+            logger.error('ERROR AL OBTENER MENSAJES', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -71,7 +72,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL ENVIAR MENSAJE', error);
+            logger.error('ERROR AL ENVIAR MENSAJE', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -100,7 +101,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL MARCAR MENSAJE COMO LEÍDO', error);
+            logger.error('ERROR AL MARCAR MENSAJE COMO LEÍDO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -129,7 +130,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL MARCAR CHAT COMO LEÍDO', error);
+            logger.error('ERROR AL MARCAR CHAT COMO LEÍDO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -158,7 +159,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL ELIMINAR MENSAJE', error);
+            logger.error('ERROR AL ELIMINAR MENSAJE', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -187,7 +188,7 @@ class MessageController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL OBTENER CONTEO DE NO LEÍDOS', error);
+            logger.error('ERROR AL OBTENER CONTEO DE NO LEÍDOS', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',

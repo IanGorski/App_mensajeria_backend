@@ -29,7 +29,7 @@ app.use(async (req, res, next) => {
         await connectToMongoDB();
         next();
     } catch (error) {
-        console.error('Error al conectar con MongoDB:', error);
+        logger.error('Error al conectar con MongoDB:', error);
         return res.status(500).json({
             ok: false,
             message: 'Error de conexión con la base de datos',
@@ -140,7 +140,7 @@ app.post('/api/upload', authMiddleware, upload.single('file'), (req, res) => {
             }
         });
     } catch (error) {
-        console.error('ERROR AL SUBIR ARCHIVO', error);
+        logger.error('ERROR AL SUBIR ARCHIVO', error);
         res.status(500).json({
             ok: false,
             message: 'Error al subir archivo'
@@ -372,7 +372,7 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
-    console.error('ERROR:', err);
+    logger.error('ERROR:', err);
     res.status(err.status || 500).json({
         ok: false,
         message: err.message || 'Error interno del servidor',

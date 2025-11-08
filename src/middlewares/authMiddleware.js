@@ -1,6 +1,7 @@
 import ENVIRONMENT from "../config/environment.config.js"
 import { ServerError } from "../error.js"
 import jwt from 'jsonwebtoken'
+import logger from '../config/logger.js'
 
 function authMiddleware(request, response, next) {
     try {
@@ -47,9 +48,7 @@ function authMiddleware(request, response, next) {
             })
         }
         else {
-            console.error(
-                'ERROR AL OBTENER LOS WORKSPACES', error
-            )
+            logger.error('ERROR AL AUTENTICAR USUARIO', error);
             return response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',

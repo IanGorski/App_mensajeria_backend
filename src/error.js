@@ -1,3 +1,5 @@
+import logger from './config/logger.js';
+
 export class CustomError extends Error{
     constructor(message, status){
         super(message)
@@ -11,10 +13,10 @@ const manejarError = (accionCallback) =>{
     }
     catch(error){
         if(error.status){
-            console.error('[CLIENT ERROR]: ' + error.message, 'Status: ' + error.status)
+            logger.error('[CLIENT ERROR]: ' + error.message, 'Status: ' + error.status);
         }
         else{
-            console.error('[SERVER ERROR]: ' + error.message)
+            logger.error('[SERVER ERROR]: ' + error.message);
         }
     }
 }

@@ -1,9 +1,10 @@
 .env
 node_modules
-# Ignorar todos los archivos .md
+# Ignorar todos los archivos .md excepto README.md y DOCUMENTACION.md
 *.md
+!README.md
+!DOCUMENTACION.md
 # Ignorar archivo de configuración de entorno
 .env
-# Ignorar README.md de la raíz del proyecto
-/README.md
+
 .vercel

@@ -1,4 +1,5 @@
 import ChatService from "../services/chat.service.js";
+import logger from '../config/logger.js';
 
 class ChatController {
     static async getAll(request, response) {
@@ -20,7 +21,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL OBTENER CHATS', error);
+            logger.error('ERROR AL OBTENER CHATS', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -49,7 +50,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL OBTENER CHAT', error);
+            logger.error('ERROR AL OBTENER CHAT', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -87,7 +88,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL CREAR CHAT PRIVADO', error);
+            logger.error('ERROR AL CREAR CHAT PRIVADO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -130,7 +131,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL CREAR GRUPO', error);
+            logger.error('ERROR AL CREAR GRUPO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -159,7 +160,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL ARCHIVAR CHAT', error);
+            logger.error('ERROR AL ARCHIVAR CHAT', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -188,7 +189,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL ELIMINAR CHAT', error);
+            logger.error('ERROR AL ELIMINAR CHAT', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
@@ -218,7 +219,7 @@ class ChatController {
                     status: error.status
                 });
             }
-            console.error('ERROR AL ACTUALIZAR GRUPO', error);
+            logger.error('ERROR AL ACTUALIZAR GRUPO', error);
             response.status(500).json({
                 ok: false,
                 message: 'Error interno del servidor',
