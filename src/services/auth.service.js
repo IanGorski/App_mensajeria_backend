@@ -5,6 +5,7 @@ import UserRepository from "../repositories/user.repository.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import logger from "../config/logger.js"
+import crypto from 'crypto'
 
 class AuthService {
     static async register(email, password, name){
@@ -116,6 +117,64 @@ class AuthService {
             logger.error('Error en AuthService.login:', error);
             throw error
         }
+    }
+
+    static async forgotPassword(email) {
+        // Buscar usuario
+        const user_found = await UserRepository.getByEmail(email)
+        if(!user_found){
+            // No tengo que revelar que el mail no existe (por seguridad) => responder OK sin contenido
+            return
+        }
+        if(!user_found.verified_email){
+            return
+        }
+
+        // Genero un token seguro
+        const resetTokenRaw = crypto.randomBytes(32).toString('hex')
+        // Esto es opcional: hash para guardar (si requiero más seguridad para posterior actualización). Acá se guarda directo.
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 30) // 30 minutos
+        await UserRepository.setResetTokenByEmail(email, resetTokenRaw, expiresAt)
+
+        const frontendUrl = process.env.NODE_ENV === 'development' 
+            ? 'http://localhost:5173' 
+            : process.env.URL_FRONTEND;
+        const resetLink = `${frontendUrl}/reset-password/${resetTokenRaw}`
+
+        try {
+            await mailTransporter.sendMail({
+                from: ENVIRONMENT.GMAIL_USER,
+                to: email,
+                subject: 'Recuperar contraseña',
+                html: `
+                    <h1>Solicitud de recuperación de contraseña</h1>
+                    <p>Haz click en el siguiente enlace para establecer una nueva contraseña. Este enlace expira en 30 minutos.</p>
+                    <a href="${resetLink}">${resetLink}</a>
+                `
+            })
+        } catch (error) {
+            logger.error('ERROR AL ENVIAR MAIL DE RECUPERACION', error)
+        }
+    }
+
+    static async resetPassword(token, newPassword) {
+        const user_found = await UserRepository.getByResetToken(token)
+        if(!user_found){
+            throw new ServerError(400, 'Token inválido o expirado')
+        }
+
+        const password_hashed = await bcrypt.hash(newPassword, 12)
+        await UserRepository.updateById(user_found._id, {
+            password: password_hashed,
+            reset_password_token: null,
+            reset_password_expires: null,
+            modified_at: new Date()
+        })
+    }
+
+    static async validateResetToken(token){
+        const user_found = await UserRepository.getByResetToken(token)
+        return !!user_found
     }
 }
 

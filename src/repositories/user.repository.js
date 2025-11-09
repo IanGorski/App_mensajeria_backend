@@ -68,6 +68,37 @@ class UserRepository {
         )
     }
 
+    static async setResetTokenByEmail(email, token, expiresAt) {
+        try {
+            await User.updateOne(
+                { email, active: true },
+                { 
+                    $set: {
+                        reset_password_token: token,
+                        reset_password_expires: expiresAt
+                    }
+                }
+            );
+        } catch (error) {
+            logger.error('[SERVER ERROR]: no se pudo setear token de reseteo', error)
+            throw error
+        }
+    }
+
+    static async getByResetToken(token) {
+        try {
+            const now = new Date();
+            return await User.findOne({
+                reset_password_token: token,
+                reset_password_expires: { $gt: now },
+                active: true
+            });
+        } catch (error) {
+            logger.error('[SERVER ERROR]: no se pudo obtener usuario por reset token', error)
+            throw error
+        }
+    }
+
     static async searchByEmail(email) {
         try {
             const users = await User.find({

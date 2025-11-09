@@ -133,6 +133,55 @@ class AuthController {
             })
         }
     }
+
+    static async forgotPassword(request, response){
+        try {
+            const { email } = request.body
+            if(!email){
+                return response.status(400).json({ ok:false, message:'Email requerido', status:400 })
+            }
+            await AuthService.forgotPassword(email)
+            // Siempre responder éxito para no filtrar existencia de cuenta
+            return response.status(200).json({ ok:true, message:'Si el email existe se enviará un enlace de recuperación', status:200 })
+        } catch(error) {
+            logger.error('ERROR EN forgotPassword', error)
+            return response.status(500).json({ ok:false, message:'Error interno', status:500 })
+        }
+    }
+
+    static async resetPassword(request, response){
+        try {
+            const { token, password } = request.body
+            if(!token || !password){
+                return response.status(400).json({ ok:false, message:'Token y nueva contraseña requeridos', status:400 })
+            }
+            await AuthService.resetPassword(token, password)
+            return response.status(200).json({ ok:true, message:'Contraseña actualizada', status:200 })
+        } catch(error){
+            if(error.status){
+                return response.status(error.status).json({ ok:false, message:error.message, status:error.status })
+            }
+            logger.error('ERROR EN resetPassword', error)
+            return response.status(500).json({ ok:false, message:'Error interno', status:500 })
+        }
+    }
+
+    static async validateResetToken(request, response){
+        try {
+            const { token } = request.params
+            if(!token){
+                return response.status(400).json({ ok:false, message:'Token requerido', status:400 })
+            }
+            const valid = await AuthService.validateResetToken(token)
+            if(!valid){
+                return response.status(400).json({ ok:false, message:'Token inválido o expirado', status:400 })
+            }
+            return response.status(200).json({ ok:true, message:'Token válido', status:200 })
+        } catch(error){
+            logger.error('ERROR EN validateResetToken', error)
+            return response.status(500).json({ ok:false, message:'Error interno', status:500 })
+        }
+    }
 }
 
 

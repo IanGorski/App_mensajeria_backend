@@ -11,6 +11,8 @@ API RESTful y servidor WebSocket para aplicación de mensajería instantánea co
 [![Winston](https://img.shields.io/badge/Winston-3.x-yellow.svg)](https://github.com/winstonjs/winston)
 [![Joi](https://img.shields.io/badge/Joi-17.x-orange.svg)](https://joi.dev/)
 [![Nodemailer](https://img.shields.io/badge/Nodemailer-6.x-red.svg)](https://nodemailer.com/)
+[![Vitest](https://img.shields.io/badge/Vitest-1.x-brightgreen.svg)](https://vitest.dev/)
+[![Supertest](https://img.shields.io/badge/Supertest-6.x-blue.svg)](https://github.com/visionmedia/supertest)
 
 ## 🌐 Despliegue
 
@@ -20,6 +22,7 @@ API RESTful y servidor WebSocket para aplicación de mensajería instantánea co
 ## 🚀 Características Principales
 
 - ✅ **Autenticación JWT** - Sistema de autenticación seguro con tokens
+- ✅ **Recuperación de Contraseña** - Flow completo forgot/reset con tokens temporales
 - ✅ **Mensajería en Tiempo Real** - WebSocket con Socket.IO
 - ✅ **Gestión de Chats** - Chats privados y grupales
 - ✅ **Estados de Conexión** - Indicadores de usuario online/offline
@@ -31,6 +34,7 @@ API RESTful y servidor WebSocket para aplicación de mensajería instantánea co
 - ✅ **Base de Datos MongoDB** - Persistencia con Mongoose
 - ✅ **Logging Estructurado** - Sistema de logs con Winston
 - ✅ **Verificación de Email** - Validación de cuentas con Nodemailer
+- ✅ **Testing Automatizado** - Suite completa con Vitest y Supertest
 
 ### Prerrequisitos
 
@@ -124,6 +128,9 @@ La documentación completa de todos los endpoints está disponible en [API_DOCUM
 - `POST /api/auth/login` - Iniciar sesión
 - `GET /api/auth/verify` - Verificar token
 - `GET /api/auth/verify-email/:token` - Verificar email
+- `POST /api/auth/forgot-password` - Solicitar recuperación de contraseña
+- `POST /api/auth/reset-password` - Restablecer contraseña con token
+- `GET /api/auth/reset-password/validate/:token` - Validar token de reset
 
 #### Chats
 
@@ -166,21 +173,47 @@ npm run nodemon-dev
 
 - ✅ Contraseñas hasheadas con bcrypt (10 salt rounds)
 - ✅ Tokens JWT con expiración configurable
+- ✅ Tokens de reset con expiración (1 hora)
 - ✅ Validación de datos con Joi
 - ✅ CORS configurado
 - ✅ Autenticación requerida en rutas protegidas
 - ✅ Sanitización de inputs
 - ✅ Variables de entorno para credenciales sensibles
 
-## 📈 Estado del Proyecto
+## 🧪 Testing
+
+El proyecto incluye suite de testing automatizado con Vitest y Supertest.
+
+```bash
+# Ejecutar todos los tests
+npm test
+
+# Tests con interfaz visual
+npm run test:ui
+
+# Coverage de tests
+npm run test:coverage
+```
+
+### Tests Incluidos
+
+- ✅ **Auth Flow Forgot/Reset**: Validación completa del flujo de recuperación de contraseña
+  - Envío de email con token válido
+  - Validación de token activo/expirado
+  - Reset exitoso con token válido
+  - Manejo de errores (token inválido, email no existe, etc.)
+
+## 📈 Estado actual
 
 - ✅ Autenticación y autorización
+- ✅ Recuperación de contraseña
 - ✅ Sistema de chats privados y grupales
 - ✅ Mensajería en tiempo real
 - ✅ Carga de archivos
 - ✅ Verificación por email
 - ✅ Sistema de archivado
 - ✅ Logging y manejo de errores
+- ✅ Testing automatizado
 
 ## 🛠️ Troubleshooting
 

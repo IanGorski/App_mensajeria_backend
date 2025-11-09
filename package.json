@@ -8,14 +8,19 @@
     "dev": "node --watch ./src/main.js",
     "dev:socket": "node --watch ./src/socket.js",
     "nodemon-dev": "nodemon ./src/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "author": "matu.dev",
   "license": "ISC",
   "type": "module",
   "description": "Intento de app con node.js",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@vitest/ui": "^4.0.8",
+    "nodemon": "^3.1.10",
+    "supertest": "^6.3.3",
+    "vitest": "^4.0.8"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
