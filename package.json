@@ -8,6 +8,7 @@
     "dev": "node --watch ./src/main.js",
     "dev:socket": "node --watch ./src/socket.js",
     "nodemon-dev": "nodemon ./src/main.js",
+    "build": "echo 'Build completed'",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
