@@ -28,7 +28,8 @@ const allowedSocketOrigins = [
     'http://localhost:5174',
     'http://localhost:3000',
     process.env.URL_FRONTEND,
-    'https://app-mensajeria-frontend.vercel.app'
+    'https://app-mensajeria-frontend.vercel.app',
+    'https://app-mensajeria-frontend.onrender.com'
 ].filter(Boolean);
 
 // Configurar Socket.io

@@ -46,7 +46,8 @@ const corsOptions = {
             'http://localhost:5173',
             'http://localhost:5174',
             'http://localhost:3000',
-            'https://app-mensajeria-frontend.vercel.app'
+            'https://app-mensajeria-frontend.vercel.app',
+            'https://app-mensajeria-frontend.onrender.com'
         ];
         
         // Permitir requests sin origin (como aplicaciones móviles o Postman)
@@ -160,7 +161,9 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
         'http://localhost:5173',
         'http://localhost:5174',
         'http://localhost:3000',
-        ENVIRONMENT.URL_FRONTEND
+        ENVIRONMENT.URL_FRONTEND,
+        'https://app-mensajeria-frontend.vercel.app',
+        'https://app-mensajeria-frontend.onrender.com'
     ].filter(Boolean);
 
     io = new Server(httpServer, {
