@@ -28,4 +28,13 @@ const logger = winston.createLogger({
     transports
 });
 
+// Filtrar logs sensibles en producción
+if (process.env.NODE_ENV === 'production') {
+    logger.transports.forEach((t) => {
+        if (t instanceof winston.transports.Console) {
+            t.silent = true;
+        }
+    });
+}
+
 export default logger;

@@ -111,9 +111,20 @@ io.on('connection', async (socket) => {
     }
     
     // Unirse a salas de chats
-    socket.on('joinChat', (chat_id) => {
-        socket.join(`chat_${chat_id}`);
-        logger.info(`Usuario ${socket.user.name} se unió al chat ${chat_id}`);
+    socket.on('joinChat', async (chat_id) => {
+        try {
+            // Validar que el usuario tenga acceso al chat
+            const hasAccess = await userHasAccessToChat(socket.user.id, chat_id);
+            if (!socket.user || !hasAccess) {
+                logger.warn(`Acceso denegado al chat ${chat_id.substring(0, 8)}... para usuario`);
+                return socket.emit('error', { message: 'No tienes permiso para acceder a este chat.' });
+            }
+            socket.join(`chat_${chat_id}`);
+            logger.info(`Usuario ${socket.user.name} se unió al chat ${chat_id.substring(0, 8)}...`);
+        } catch (error) {
+            logger.error('Error al unirse al chat:', error.message);
+            socket.emit('error', { message: 'Error al unirse al chat' });
+        }
     });
     
     // Enviar mensaje
@@ -121,7 +132,31 @@ io.on('connection', async (socket) => {
         try {
             const { chat_id, content, type, fileUrl, client_id } = data;
             
-            logger.info(`Enviando mensaje en chat ${chat_id} desde usuario ${socket.user.name}`);
+            // Validaciones de entrada
+            if (!chat_id || !content) {
+                return socket.emit('error', { message: 'Datos incompletos' });
+            }
+            
+            if (typeof content !== 'string' || content.trim().length === 0) {
+                return socket.emit('error', { message: 'Contenido inválido' });
+            }
+            
+            if (content.length > MAX_MESSAGE_LENGTH) {
+                return socket.emit('error', { message: `El mensaje no puede exceder ${MAX_MESSAGE_LENGTH} caracteres` });
+            }
+            
+            if (type && !ALLOWED_MESSAGE_TYPES.includes(type)) {
+                return socket.emit('error', { message: 'Tipo de mensaje no permitido' });
+            }
+            
+            // Verificar acceso al chat
+            const hasAccess = await userHasAccessToChat(socket.user.id, chat_id);
+            if (!hasAccess) {
+                logger.warn(`Intento de enviar mensaje sin acceso al chat`);
+                return socket.emit('error', { message: 'No tienes acceso a este chat' });
+            }
+            
+            logger.info(`Enviando mensaje en chat ${chat_id.substring(0, 8)}... desde usuario ${socket.user.name}`);
             
             // Guardar mensaje en BD
             const message = await MessageService.sendMessage(
@@ -153,9 +188,9 @@ io.on('connection', async (socket) => {
             // Emitir a todos los participantes del chat
             io.to(`chat_${chat_id}`).emit('receiveMessage', messageToEmit);
             
-            logger.info(`Mensaje enviado exitosamente en chat ${chat_id}`);
+            logger.info(`Mensaje enviado exitosamente en chat ${chat_id.substring(0, 8)}...`);
         } catch (error) {
-            logger.error('ERROR AL ENVIAR MENSAJE:', error);
+            logger.error('ERROR AL ENVIAR MENSAJE:', error.message);
             socket.emit('error', { message: 'Error al enviar mensaje', details: error.message });
         }
     });

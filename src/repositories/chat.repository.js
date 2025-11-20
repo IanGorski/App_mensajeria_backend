@@ -100,6 +100,20 @@ class ChatRepository {
             throw error;
         }
     }
+
+    static async userHasAccess(user_id, chat_id) {
+        try {
+            const chat = await Chat.findOne({
+                _id: chat_id,
+                participants: user_id,
+                active: true
+            });
+            return chat !== null;
+        } catch (error) {
+            logger.error('[SERVER ERROR]: error al verificar acceso al chat', error);
+            return false;
+        }
+    }
 }
 
 export default ChatRepository;
