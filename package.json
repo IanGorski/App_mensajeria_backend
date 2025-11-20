@@ -7,6 +7,7 @@
     "start:socket": "node ./src/socket.js",
     "dev": "node --watch ./src/main.js",
     "dev:socket": "node --watch ./src/socket.js",
+    "dev:all": "start cmd /k \"node --watch ./src/main.js\" && start cmd /k \"node --watch ./src/socket.js\"",
     "nodemon-dev": "nodemon ./src/main.js",
     "build": "echo 'Build completed'",
     "test": "vitest",

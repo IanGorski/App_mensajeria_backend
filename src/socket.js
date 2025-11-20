@@ -197,7 +197,7 @@ io.on('connection', async (socket) => {
             // Emitir a todos los participantes del chat
             io.to(`chat_${chat_id}`).emit('receiveMessage', messageToEmit);
             
-            logger.info(`Mensaje enviado exitosamente en chat ${chat_id.substring(0, 8)}...`);
+            logger.info(`Mensaje enviado exitosamente - Chat: ${chat_id.substring(0, 8)}... | Usuario: ${socket.user.name} | Contenido: "${content.substring(0, 30)}${content.length > 30 ? '...' : ''}"`);
         } catch (error) {
             logger.error('ERROR AL ENVIAR MENSAJE:', error.message);
             socket.emit('error', { message: 'Error al enviar mensaje', details: error.message });
@@ -295,8 +295,12 @@ io.on('connection', async (socket) => {
 });
 
 // Iniciar servidor
-// Render usa la variable PORT, no SOCKET_PORT
-const PORT = process.env.PORT || process.env.SOCKET_PORT || 3001;
+// En desarrollo: usar puerto 3001
+// En producción (Render): usar la variable PORT asignada
+const PORT = process.env.NODE_ENV === 'production' 
+    ? (process.env.PORT || 3001)
+    : 3001;
+
 httpServer.listen(PORT, () => {
     logger.info(`Servidor WebSocket corriendo en puerto ${PORT}`);
     logger.info(`Socket.io configurado correctamente`);
