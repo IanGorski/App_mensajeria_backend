@@ -8,6 +8,15 @@ import UserRepository from './repositories/user.repository.js';
 import ChatRepository from './repositories/chat.repository.js';
 import logger from './config/logger.js';
 
+//validación de mensajes
+const MAX_MESSAGE_LENGTH = 5000;
+const ALLOWED_MESSAGE_TYPES = ['text', 'image', 'file', 'audio', 'video'];
+
+// Función auxiliar para verificar acceso al chat
+async function userHasAccessToChat(user_id, chat_id) {
+    return await ChatRepository.userHasAccess(user_id, chat_id);
+}
+
 // Conectar a MongoDB
 await connectToMongoDB();
 
