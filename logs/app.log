@@ -2140,3 +2140,178 @@
 {"level":"info","message":"Using existing database connection","timestamp":"2025-11-06T07:19:39.990Z"}
 {"level":"info","message":"Using existing database connection","timestamp":"2025-11-06T07:19:40.139Z"}
 {"level":"info","message":"Using existing database connection","timestamp":"2025-11-06T07:19:40.145Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:34:10.089Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:34:10.092Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:34:11.096Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:34:11.100Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-01.poll1jf.mongodb.net","timestamp":"2025-11-20T16:34:13.136Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:34:41.150Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:34:41.156Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-02.poll1jf.mongodb.net","timestamp":"2025-11-20T16:34:43.358Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:34:43.358Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:34:43.364Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:34:43.364Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:34:43.365Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:34:56.818Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:34:56.822Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-01.poll1jf.mongodb.net","timestamp":"2025-11-20T16:34:58.828Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:11.761Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:11.780Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:11.791Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:36:14.120Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:36:14.121Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:36:14.121Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:36:14.292Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:36:14.293Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:36:14.293Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:36:14.463Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:36:14.464Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:36:14.464Z"}
+{"level":"info","message":"Enviando mensaje en chat 690bf192... desde usuario Ian Gorski","timestamp":"2025-11-20T16:36:20.968Z"}
+{"level":"info","message":"Mensaje enviado exitosamente en chat 690bf192...","timestamp":"2025-11-20T16:36:22.029Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:36:55.941Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:36:55.944Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-02.poll1jf.mongodb.net","timestamp":"2025-11-20T16:36:58.058Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:36:58.059Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:36:58.064Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:36:58.064Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:36:58.065Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:58.250Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:58.414Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:36:58.418Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:02.149Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:02.150Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:02.151Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:02.320Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:02.321Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:02.321Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:02.492Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:02.492Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:02.492Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:06.545Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:06.548Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:08.415Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:08.416Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:08.417Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:08.585Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:08.586Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:08.587Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:09.445Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:09.448Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:12.936Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:12.936Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:12.936Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:13.107Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:13.107Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:13.108Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:37:30.895Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:37:30.900Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-01.poll1jf.mongodb.net","timestamp":"2025-11-20T16:37:33.412Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:37:33.412Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:37:33.417Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:37:33.417Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:37:33.418Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:33.513Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:37:33.524Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:37.231Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:37.232Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:37.232Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:37:37.406Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:37:37.406Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:37:37.406Z"}
+{"level":"info","message":"Enviando mensaje en chat 690bf192... desde usuario Ian Gorski","timestamp":"2025-11-20T16:38:09.806Z"}
+{"level":"info","message":"Mensaje enviado exitosamente en chat 690bf192...","timestamp":"2025-11-20T16:38:10.877Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:38:11.620Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:38:11.624Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:38:12.041Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:38:12.044Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:38:15.105Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:38:15.106Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:38:15.106Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:38:15.276Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:38:15.277Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:38:15.277Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:38:29.540Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:38:31.020Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:38:31.021Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:38:31.021Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:38:32.886Z"}
+{"level":"info","message":"Usuario conectado: ROBOCOP (690bf14178a40e792c0ad8dd)","timestamp":"2025-11-20T16:38:36.929Z"}
+{"level":"info","message":"Usuario ROBOCOP se unió al chat 690e6da7c7a45d254645d7ef","timestamp":"2025-11-20T16:38:37.817Z"}
+{"level":"info","message":"Usuario ROBOCOP se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:38:37.818Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf192...","timestamp":"2025-11-20T16:38:40.337Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf192...","timestamp":"2025-11-20T16:38:40.716Z"}
+{"level":"info","message":"Usuario ROBOCOP se unió al chat 690bf192...","timestamp":"2025-11-20T16:38:41.424Z"}
+{"level":"info","message":"Usuario ROBOCOP se unió al chat 690bf192...","timestamp":"2025-11-20T16:38:41.940Z"}
+{"level":"info","message":"Enviando mensaje en chat 690bf192... desde usuario ROBOCOP","timestamp":"2025-11-20T16:38:50.762Z"}
+{"level":"info","message":"Mensaje enviado exitosamente en chat 690bf192...","timestamp":"2025-11-20T16:38:52.300Z"}
+{"level":"info","message":"Usuario desconectado: ROBOCOP","timestamp":"2025-11-20T16:39:00.648Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:39:08.472Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:39:08.476Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:39:08.929Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:39:08.934Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:39:11.808Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:39:11.809Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:39:11.809Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:39:11.992Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:39:11.992Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:39:11.992Z"}
+{"level":"info","message":"Enviando mensaje en chat 690bf192... desde usuario Ian Gorski","timestamp":"2025-11-20T16:39:21.377Z"}
+{"level":"info","message":"Mensaje enviado exitosamente en chat 690bf192...","timestamp":"2025-11-20T16:39:22.488Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:40:33.166Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:40:33.170Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-01.poll1jf.mongodb.net","timestamp":"2025-11-20T16:40:35.167Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:40:35.167Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:40:35.174Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:40:35.174Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:40:35.175Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:40:35.272Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:40:35.423Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:40:38.567Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:40:38.567Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:40:38.568Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:40:38.741Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:40:38.741Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:40:38.742Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:41:22.344Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:41:22.348Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-02.poll1jf.mongodb.net","timestamp":"2025-11-20T16:41:24.360Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:41:24.361Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:41:24.366Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:41:24.366Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:41:24.367Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:24.516Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:24.526Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:27.808Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:27.808Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:27.809Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:27.983Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:27.984Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:27.984Z"}
+{"level":"info","message":"Conectando a MongoDB...","timestamp":"2025-11-20T16:41:43.675Z"}
+{"level":"info","message":"Entorno: development","timestamp":"2025-11-20T16:41:43.679Z"}
+{"level":"info","message":"Conexión con DB exitosa: ac-zm0rihm-shard-00-00.poll1jf.mongodb.net","timestamp":"2025-11-20T16:41:45.743Z"}
+{"level":"info","message":"Base de datos: whatsapp-clone","timestamp":"2025-11-20T16:41:45.743Z"}
+{"level":"info","message":"Servidor WebSocket corriendo en puerto 3001","timestamp":"2025-11-20T16:41:45.748Z"}
+{"level":"info","message":"Socket.io configurado correctamente","timestamp":"2025-11-20T16:41:45.749Z"}
+{"level":"info","message":"Orígenes permitidos: http://localhost:5173, http://localhost:5174, http://localhost:3000, http://localhost:5173, https://app-mensajeria-frontend.vercel.app, https://app-mensajeria-frontend.onrender.com","timestamp":"2025-11-20T16:41:45.749Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:46.038Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:46.052Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:47.574Z"}
+{"level":"info","message":"Usuario conectado: Ian Gorski (690bf0e978a40e792c0ad8d1)","timestamp":"2025-11-20T16:41:47.577Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:50.123Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:50.124Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:50.124Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:50.296Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:50.297Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:50.297Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:51.525Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:51.525Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:51.525Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 691406000ea69d4b8fb94aad","timestamp":"2025-11-20T16:41:51.699Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690e6d8ec7a45d254645d7e2","timestamp":"2025-11-20T16:41:51.699Z"}
+{"level":"info","message":"Usuario Ian Gorski se unió al chat 690bf19278a40e792c0ad8fe","timestamp":"2025-11-20T16:41:51.699Z"}
+{"level":"info","message":"Enviando mensaje en chat 690bf192... desde usuario Ian Gorski","timestamp":"2025-11-20T16:41:59.669Z"}
+{"level":"info","message":"Mensaje enviado exitosamente - Chat: 690bf192... | Usuario: Ian Gorski | Contenido: \"Esta es la prueba #20k\"","timestamp":"2025-11-20T16:42:00.785Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:45:10.830Z"}
+{"level":"info","message":"Usuario desconectado: Ian Gorski","timestamp":"2025-11-20T16:45:10.834Z"}
