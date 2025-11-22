@@ -20,21 +20,12 @@ if (!process.env.VERCEL) {
 }
 
 const logger = winston.createLogger({
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+    level: process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
     format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.json()
     ),
     transports
 });
-
-// Filtrar logs sensibles en producción
-if (process.env.NODE_ENV === 'production') {
-    logger.transports.forEach((t) => {
-        if (t instanceof winston.transports.Console) {
-            t.silent = true;
-        }
-    });
-}
 
 export default logger;
