@@ -9,7 +9,8 @@
     "build": "echo 'Build completed'",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "start:socket": "node ./src/socket.js"
   },
   "author": "matu.dev",
   "license": "ISC",
