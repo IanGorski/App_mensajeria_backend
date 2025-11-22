@@ -10,7 +10,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "start:socket": "node ./src/socket.js"
+    "start:socket": "node ./src/main.js"
   },
   "author": "matu.dev",
   "license": "ISC",
