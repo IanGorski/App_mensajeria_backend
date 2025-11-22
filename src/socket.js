@@ -1,222 +1,89 @@
-import { createServer } from 'http';
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import ENVIRONMENT from './config/environment.config.js';
-import connectToMongoDB from './config/configMongoDB.config.js';
-import MessageService from './services/message.service.js';
 import UserRepository from './repositories/user.repository.js';
 import ChatRepository from './repositories/chat.repository.js';
+import MessageService from './services/message.service.js';
 import logger from './config/logger.js';
 
-//validación de mensajes
-const MAX_MESSAGE_LENGTH = 5000;
-const ALLOWED_MESSAGE_TYPES = ['text', 'image', 'file', 'audio', 'video'];
+/**
+ * Configurar y gestionar Socket.IO
+ * @param {Server} httpServer - Servidor HTTP de Express
+ * @returns {Server} Instancia de Socket.IO configurada
+ */
+export const setupSocketIO = (httpServer) => {
+    // Permitir orígenes locales y el configurado por entorno
+    const allowedSocketOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:3000',
+        ENVIRONMENT.URL_FRONTEND,
+        'https://app-mensajeria-frontend.vercel.app',
+        'https://app-mensajeria-frontend.onrender.com'
+    ].filter(Boolean);
 
-// Función auxiliar para verificar acceso al chat
-async function userHasAccessToChat(user_id, chat_id) {
-    return await ChatRepository.userHasAccess(user_id, chat_id);
-}
-
-// Conectar a MongoDB
-await connectToMongoDB();
-
-// Crear servidor HTTP para Socket.io
-const httpServer = createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-        ok: true,
-        message: 'Servidor WebSocket funcionando',
-        service: 'socket.io',
-        timestamp: new Date().toISOString()
-    }));
-});
-
-// Configurar Socket orígenes
-const allowedSocketOrigins = [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:3000',
-    process.env.URL_FRONTEND,
-    'https://app-mensajeria-frontend.vercel.app',
-    'https://app-mensajeria-frontend.onrender.com'
-].filter(Boolean);
-
-// Configurar Socket.io
-const io = new Server(httpServer, {
-    cors: {
-        origin: allowedSocketOrigins,
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
-
-// Middleware de autenticación para Socket.io
-io.use((socket, next) => {
-    try {
-        const token = socket.handshake.auth.token;
-        if (!token) {
-            return next(new Error('Token no proporcionado'));
+    const io = new Server(httpServer, {
+        cors: {
+            origin: allowedSocketOrigins,
+            methods: ["GET", "POST"],
+            credentials: true
         }
+    });
 
-        const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
-        socket.user = decoded;
-        next();
-    } catch (error) {
-        next(new Error('Token inválido'));
-    }
-});
+    // Middleware de autenticación para Socket.IO
+    io.use((socket, next) => {
+        try {
+            const token = socket.handshake.auth.token;
+            if (!token) {
+                return next(new Error('Token no proporcionado'));
+            }
 
-// Eventos de Socket.io
-io.on('connection', async (socket) => {
-    logger.info(`Usuario conectado: ${socket.user.name} (${socket.user.id})`);
-    
-    // Actualizar estado de conexión del usuario
-    await UserRepository.updateConnectionStatus(socket.user.id, true, socket.id);
-    
-    // Unir al usuario a su sala personal
-    socket.join(`user_${socket.user.id}`);
-    
-    // Obtener los chats del usuario y unirse a sus salas
-    try {
-        const userChats = await ChatRepository.getByUserId(socket.user.id);
-        userChats.forEach(chat => {
-            socket.join(`chat_${chat._id}`);
-            logger.info(`Usuario ${socket.user.name} se unió al chat ${chat._id}`);
-        });
-    } catch (error) {
-        logger.error('Error al unir usuario a sus chats:', error);
-    }
-    
-    // Notificar a todos los contactos que el usuario está online
-    try {
-        const userChats = await ChatRepository.getByUserId(socket.user.id);
-        userChats.forEach(chat => {
-            socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
-                user_id: socket.user.id,
-                online: true
+            const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
+            socket.user = decoded;
+            next();
+        } catch (error) {
+            next(new Error('Token inválido'));
+        }
+    });
+
+    // Eventos de Socket.IO
+    io.on('connection', async (socket) => {
+        logger.info(`[SOCKET] Usuario conectado: ${socket.user.name} (ID: ${socket.user.id}, Socket: ${socket.id})`);
+        
+        // Actualizar estado de conexión del usuario
+        await UserRepository.updateConnectionStatus(socket.user.id, true, socket.id);
+        logger.info(`[DB] Estado de conexión actualizado para ${socket.user.name} (online: true)`);
+        
+        // Unir al usuario a su sala personal
+        socket.join(`user_${socket.user.id}`);
+        
+        // Obtener los chats del usuario y unirse a sus salas
+        try {
+            const userChats = await ChatRepository.getByUserId(socket.user.id);
+            logger.info(`[SOCKET] ${socket.user.name} tiene ${userChats.length} chat(s) activo(s)`);
+            userChats.forEach(chat => {
+                socket.join(`chat_${chat._id}`);
+                logger.info(`[SOCKET] Usuario ${socket.user.name} se unió al chat ${chat._id}`);
             });
-        });
-    } catch (error) {
-        logger.error('Error al notificar estado online:', error);
-    }
-
-    // Sync inicial de estados para el cliente conectado
-    try {
-        const userChats = await ChatRepository.getByUserId(socket.user.id);
-        const statusMap = {};
-        userChats.forEach(chat => {
-            chat.participants.forEach(p => {
-                if (p._id.toString() !== socket.user.id.toString()) {
-                    statusMap[p._id] = {
-                        online: !!p.online,
-                        last_connection: p.last_connection || null
-                    };
-                }
+        } catch (error) {
+            logger.error(`[SOCKET ERROR] Error al unir usuario ${socket.user.name} a sus chats:`, error);
+        }
+        
+        // Notificar a todos los contactos que el usuario está online
+        try {
+            const userChats = await ChatRepository.getByUserId(socket.user.id);
+            logger.info(`[SOCKET] Notificando estado online de ${socket.user.name} a ${userChats.length} chat(s)`);
+            userChats.forEach(chat => {
+                socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
+                    user_id: socket.user.id,
+                    online: true
+                });
             });
-        });
-        socket.emit('statusSync', statusMap);
-    } catch (error) {
-        logger.error('Error preparando statusSync inicial:', error);
-    }
-    
-    // Unirse a salas de chats
-    socket.on('joinChat', async (chat_id) => {
-        try {
-            // Validar que el usuario tenga acceso al chat
-            const hasAccess = await userHasAccessToChat(socket.user.id, chat_id);
-            if (!socket.user || !hasAccess) {
-                logger.warn(`Acceso denegado al chat ${chat_id.substring(0, 8)}... para usuario`);
-                return socket.emit('error', { message: 'No tienes permiso para acceder a este chat.' });
-            }
-            socket.join(`chat_${chat_id}`);
-            logger.info(`Usuario ${socket.user.name} se unió al chat ${chat_id.substring(0, 8)}...`);
         } catch (error) {
-            logger.error('Error al unirse al chat:', error.message);
-            socket.emit('error', { message: 'Error al unirse al chat' });
+            logger.error(`[SOCKET ERROR] Error al notificar estado online de ${socket.user.name}:`, error);
         }
-    });
-    
-    // Enviar mensaje
-    socket.on('sendMessage', async (data) => {
-        try {
-            const { chat_id, content, type, fileUrl, client_id } = data;
-            
-            // Validaciones de entrada
-            if (!chat_id || !content) {
-                return socket.emit('error', { message: 'Datos incompletos' });
-            }
-            
-            if (typeof content !== 'string' || content.trim().length === 0) {
-                return socket.emit('error', { message: 'Contenido inválido' });
-            }
-            
-            if (content.length > MAX_MESSAGE_LENGTH) {
-                return socket.emit('error', { message: `El mensaje no puede exceder ${MAX_MESSAGE_LENGTH} caracteres` });
-            }
-            
-            if (type && !ALLOWED_MESSAGE_TYPES.includes(type)) {
-                return socket.emit('error', { message: 'Tipo de mensaje no permitido' });
-            }
-            
-            // Verificar acceso al chat
-            const hasAccess = await userHasAccessToChat(socket.user.id, chat_id);
-            if (!hasAccess) {
-                logger.warn(`Intento de enviar mensaje sin acceso al chat`);
-                return socket.emit('error', { message: 'No tienes acceso a este chat' });
-            }
-            
-            logger.info(`Enviando mensaje en chat ${chat_id.substring(0, 8)}... desde usuario ${socket.user.name}`);
-            
-            // Guardar mensaje en BD
-            const message = await MessageService.sendMessage(
-                chat_id,
-                socket.user.id,
-                content,
-                type,
-                fileUrl
-            );
-            
-            // Actualizar el lastMessage del chat
-            await ChatRepository.updateLastMessage(chat_id, message._id);
-            
-            // Preparar objeto de mensaje para emitir
-            const messageToEmit = {
-                ...message.toObject(),
-                sender: {
-                    id: socket.user.id,
-                    _id: socket.user.id,
-                    name: socket.user.name
-                },
-                sender_id: {
-                    _id: socket.user.id,
-                    name: socket.user.name
-                },
-                client_id: client_id || null
-            };
-            
-            // Emitir a todos los participantes del chat
-            io.to(`chat_${chat_id}`).emit('receiveMessage', messageToEmit);
-            
-            logger.info(`Mensaje enviado exitosamente - Chat: ${chat_id.substring(0, 8)}... | Usuario: ${socket.user.name} | Contenido: "${content.substring(0, 30)}${content.length > 30 ? '...' : ''}"`);
-        } catch (error) {
-            logger.error('ERROR AL ENVIAR MENSAJE:', error.message);
-            socket.emit('error', { message: 'Error al enviar mensaje', details: error.message });
-        }
-    });
 
-    // Reenviar mensajes recientes al cliente que se conecta tarde
-    socket.on('requestRecentMessages', async (chat_id) => {
-        try {
-            const recentMessages = await MessageService.getMessages(chat_id, socket.user.id, 50, 0); // Últimos 50 mensajes
-            socket.emit('recentMessages', { chat_id, messages: recentMessages });
-        } catch (error) {
-            logger.error('ERROR AL OBTENER MENSAJES RECIENTES:', error);
-            socket.emit('error', { message: 'Error al obtener mensajes recientes', details: error.message });
-        }
-    });
-
-    // Petición de sync de estados
-    socket.on('requestStatusSync', async () => {
+        // Sync inicial de estados para el cliente conectado
         try {
             const userChats = await ChatRepository.getByUserId(socket.user.id);
             const statusMap = {};
@@ -230,81 +97,153 @@ io.on('connection', async (socket) => {
                     }
                 });
             });
+            const userCount = Object.keys(statusMap).length;
+            logger.info(`[SOCKET] Enviando statusSync a ${socket.user.name} con ${userCount} usuario(s)`);
             socket.emit('statusSync', statusMap);
         } catch (error) {
-            logger.error('Error al procesar requestStatusSync:', error);
+            logger.error(`[SOCKET ERROR] Error preparando statusSync para ${socket.user.name}:`, error);
         }
-    });
-    
-    // Escribiendo...
-    socket.on('typing', (data) => {
-        const { chat_id } = data;
-        socket.to(`chat_${chat_id}`).emit('userTyping', {
-            user_id: socket.user.id,
-            user_name: socket.user.name,
-            chat_id
+        
+        // Unirse a salas de chats
+        socket.on('joinChat', (chat_id) => {
+            socket.join(`chat_${chat_id}`);
+            logger.info(`[SOCKET] Usuario ${socket.user.name} se unió al chat ${chat_id}`);
         });
-    });
-    
-    // Dejar de escribir
-    socket.on('stopTyping', (data) => {
-        const { chat_id } = data;
-        socket.to(`chat_${chat_id}`).emit('userStoppedTyping', {
-            user_id: socket.user.id,
-            chat_id
+        
+        // Enviar mensaje
+        socket.on('sendMessage', async (data) => {
+            const startTime = Date.now();
+            try {
+                const { chat_id, content, type, fileUrl, client_id } = data;
+                
+                logger.info(`[SOCKET] ${socket.user.name} enviando mensaje (tipo: ${type}) al chat ${chat_id}`);
+                
+                // Guardar mensaje en BD
+                const message = await MessageService.sendMessage(
+                    chat_id,
+                    socket.user.id,
+                    content,
+                    type,
+                    fileUrl
+                );
+                logger.info(`[DB] Mensaje guardado exitosamente (ID: ${message._id})`);
+                
+                // Actualizar el lastMessage del chat
+                await ChatRepository.updateLastMessage(chat_id, message._id);
+                
+                // Preparar objeto de mensaje para emitir
+                const messageToEmit = {
+                    ...message.toObject(),
+                    sender: {
+                        id: socket.user.id,
+                        _id: socket.user.id,
+                        name: socket.user.name
+                    },
+                    sender_id: {
+                        _id: socket.user.id,
+                        name: socket.user.name
+                    },
+                    client_id: client_id || null
+                };
+                
+                //Emitir a todos los participantes del chat (incluyendo el remitente)
+                io.to(`chat_${chat_id}`).emit('receiveMessage', messageToEmit);
+                
+                const duration = Date.now() - startTime;
+                logger.info(`[SOCKET] Mensaje enviado exitosamente en ${duration}ms (Chat: ${chat_id}, Mensaje: ${message._id})`);
+            } catch (error) {
+                logger.error(`[SOCKET ERROR] Error al enviar mensaje de ${socket.user.name}:`, error);
+                socket.emit('error', { message: 'Error al enviar mensaje', details: error.message });
+            }
         });
-    });
-    
-    // Marcar mensajes como leídos
-    socket.on('markAsRead', async (data) => {
-        try {
+
+        // Petición explícita de sync de estados desde el cliente
+        socket.on('requestStatusSync', async () => {
+            try {
+                logger.info(`[SOCKET] ${socket.user.name} solicitó sync de estados`);
+                const userChats = await ChatRepository.getByUserId(socket.user.id);
+                const statusMap = {};
+                userChats.forEach(chat => {
+                    chat.participants.forEach(p => {
+                        if (p._id.toString() !== socket.user.id.toString()) {
+                            statusMap[p._id] = {
+                                online: !!p.online,
+                                last_connection: p.last_connection || null
+                            };
+                        }
+                    });
+                });
+                logger.info(`[SOCKET] Enviando statusSync a ${socket.user.name} con ${Object.keys(statusMap).length} usuario(s)`);
+                socket.emit('statusSync', statusMap);
+            } catch (error) {
+                logger.error(`[SOCKET ERROR] Error al procesar requestStatusSync de ${socket.user.name}:`, error);
+            }
+        });
+        
+        // Escribiendo
+        socket.on('typing', (data) => {
             const { chat_id } = data;
-            await MessageService.markChatAsRead(chat_id, socket.user.id);
-            
-            // Notificar a otros usuarios del chat
-            socket.to(`chat_${chat_id}`).emit('messagesRead', {
+            logger.info(`[SOCKET] ${socket.user.name} está escribiendo en chat ${chat_id}`);
+            socket.to(`chat_${chat_id}`).emit('userTyping', {
+                user_id: socket.user.id,
+                user_name: socket.user.name,
+                chat_id
+            });
+        });
+        
+        // Dejar de escribir
+        socket.on('stopTyping', (data) => {
+            const { chat_id } = data;
+            logger.info(`[SOCKET] ${socket.user.name} dejó de escribir en chat ${chat_id}`);
+            socket.to(`chat_${chat_id}`).emit('userStoppedTyping', {
                 user_id: socket.user.id,
                 chat_id
             });
-        } catch (error) {
-            logger.error('ERROR AL MARCAR COMO LEÍDO:', error);
-        }
-    });
-    
-    // Desconexión
-    socket.on('disconnect', async () => {
-        logger.info(`Usuario desconectado: ${socket.user.name}`);
+        });
         
-        // Actualizar estado de conexión del usuario
-        await UserRepository.updateConnectionStatus(socket.user.id, false, null);
-        
-        // Notificar a todos los contactos que el usuario está offline
-        try {
-            const userChats = await ChatRepository.getByUserId(socket.user.id);
-            userChats.forEach(chat => {
-                socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
+        // Marcar mensajes como leídos
+        socket.on('markAsRead', async (data) => {
+            try {
+                const { chat_id } = data;
+                logger.info(`[SOCKET] ${socket.user.name} marcando mensajes como leídos en chat ${chat_id}`);
+                await MessageService.markChatAsRead(chat_id, socket.user.id);
+                logger.info(`[DB] Mensajes marcados como leídos por ${socket.user.name} en chat ${chat_id}`);
+                
+                // Notificar a otros usuarios del chat
+                socket.to(`chat_${chat_id}`).emit('messagesRead', {
                     user_id: socket.user.id,
-                    online: false,
-                    last_connection: new Date()
+                    chat_id
                 });
-            });
-        } catch (error) {
-            logger.error('Error al notificar estado offline:', error);
-        }
+            } catch (error) {
+                logger.error(`[SOCKET ERROR] Error al marcar como leído (Usuario: ${socket.user.name}, Chat: ${chat_id}):`, error);
+            }
+        });
+        
+        // Desconexión
+        socket.on('disconnect', async () => {
+            const disconnectTime = new Date();
+            logger.info(`[SOCKET] Usuario desconectado: ${socket.user.name} (ID: ${socket.user.id}, Socket: ${socket.id})`);
+            
+            // Actualizar estado de conexión del usuario
+            await UserRepository.updateConnectionStatus(socket.user.id, false, null);
+            logger.info(`[DB] Estado de conexión actualizado para ${socket.user.name} (online: false)`);
+            
+            // Notificar a todos los contactos que el usuario está offline
+            try {
+                const userChats = await ChatRepository.getByUserId(socket.user.id);
+                logger.info(`[SOCKET] Notificando estado offline de ${socket.user.name} a ${userChats.length} chat(s)`);
+                userChats.forEach(chat => {
+                    socket.to(`chat_${chat._id}`).emit('userStatusChanged', {
+                        user_id: socket.user.id,
+                        online: false,
+                        last_connection: disconnectTime
+                    });
+                });
+            } catch (error) {
+                logger.error(`[SOCKET ERROR] Error al notificar estado offline de ${socket.user.name}:`, error);
+            }
+        });
     });
-});
 
-// Iniciar servidor
-// En desarrollo: usar puerto 3001
-// En producción (Render): usar la variable PORT asignada
-const PORT = process.env.NODE_ENV === 'production' 
-    ? (process.env.PORT || 3001)
-    : 3001;
-
-httpServer.listen(PORT, () => {
-    logger.info(`Servidor WebSocket corriendo en puerto ${PORT}`);
-    logger.info(`Socket.io configurado correctamente`);
-    logger.info(`Orígenes permitidos: ${allowedSocketOrigins.join(', ')}`);
-});
-
-export { io, httpServer };
+    return io;
+};

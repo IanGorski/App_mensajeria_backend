@@ -151,11 +151,6 @@ La documentación completa de todos los endpoints está disponible en [API_DOCUM
 - `GET /api/messages/chat/:chat_id/unread` - Obtener conteo de no leídos
 - `DELETE /api/messages/:message_id` - Eliminar mensaje
 
-#### Upload
-
-- `POST /api/upload` - Subir archivo
-
-
 ## 📝 Scripts Disponibles
 
 ```bash
