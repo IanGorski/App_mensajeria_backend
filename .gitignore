@@ -4,6 +4,7 @@ node_modules
 *.md
 !README.md
 !DOCUMENTACION.md
+!TROUBLESHOOTING.md
 # Ignorar archivo de configuración de entorno
 .env
 
